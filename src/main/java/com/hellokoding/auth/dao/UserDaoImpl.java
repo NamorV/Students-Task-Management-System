@@ -36,7 +36,7 @@ public class UserDaoImpl implements UserDao{
         String sql = "select * from app_user where username='" + username + "'";
         List<User> users = jdbcTemplate.query(sql, new UserMapper());
         //String password = bCryptPasswordEncoder.(users.get(0).getPassword());
-        System.out.println(users.get(0).getPassword());
+        //System.out.println(users.get(0).getPassword());
         return users.size() > 0 ? users.get(0) : null;
     }
 }
