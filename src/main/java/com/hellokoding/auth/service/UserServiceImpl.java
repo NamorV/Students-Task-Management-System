@@ -1,7 +1,7 @@
 package com.hellokoding.auth.service;
 
-import com.hellokoding.auth.model.User;
 import com.hellokoding.auth.dao.UserDao;
+import com.hellokoding.auth.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;

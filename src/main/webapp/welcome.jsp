@@ -34,8 +34,23 @@
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log Out</button>
         </form>
     </c:if>
-
 </div>
+
+ <div class="panel panel-default">
+
+            <div class="panel-heading"><span class="lead">Upload New Document</span></div>
+            <div class="uploadcontainer">
+                <form method="POST" action="welcome" enctype="multipart/form-data">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                		File1 to upload: <input type="file" name="file">
+
+                		Description: <input type="text" name="name">
+
+                		<input type="submit" value="Upload"> Press here to upload the file!
+                	</form>
+                </div>
+        </div>
+
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
