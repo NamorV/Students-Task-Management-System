@@ -59,6 +59,7 @@
                             <td>${doc.type}</td>
                             <td>${doc.description}</td>
                             <td><a href="<c:url value='/delete-document-${doc.id}' />" class="btn btn-danger custom-width">delete</a></td>
+                            <td><a href="<c:url value='/download-document-${doc.id}' />" class="btn btn-success custom-width">download</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -80,6 +81,7 @@
                 	</form>
                 </div>
         </div>
+        <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
 
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

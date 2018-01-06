@@ -13,10 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class UserController {
 
         //securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
 
-        return "redirect:/login";
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -91,6 +93,18 @@ public class UserController {
     @RequestMapping(value = { "/delete-document-{docId}" }, method = RequestMethod.GET)
     public String deleteDocument(@PathVariable int docId) {
         userDocumentService.delete(docId);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = { "/download-document-{docId}" }, method = RequestMethod.GET)
+    public String downloadDocument(@PathVariable int docId, HttpServletResponse response) throws IOException {
+        UserDocument document = userDocumentService.findById(docId);
+        response.setContentType(document.getType());
+        response.setContentLength(document.getContent().length);
+        response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
+
+        FileCopyUtils.copy(document.getContent(), response.getOutputStream());
 
         return "redirect:/";
     }

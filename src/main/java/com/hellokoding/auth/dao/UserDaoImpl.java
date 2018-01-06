@@ -25,7 +25,7 @@ public class UserDaoImpl implements UserDao{
     @Override
     public void save(User user) {
         String sql = "insert into app_user values(?,?,?)";
-        jdbcTemplate.update(sql, new Object[]{null, user.getUsername(), bCryptPasswordEncoder.encode(user.getPassword())});
+        jdbcTemplate.update(sql, new Object[]{null, user.getUsername(), user.getPassword()});
     }
 
     @Override

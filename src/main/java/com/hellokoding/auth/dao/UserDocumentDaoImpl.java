@@ -27,6 +27,13 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
     }
 
     @Override
+    public UserDocument findById(int id) {
+        String sql = "select * from user_document where id='" + id + "'";
+        List<UserDocument> document = jdbcTemplate.query(sql, new DocumentMapper());
+        return document.size() > 0 ? document.get(0) : null;
+    }
+
+    @Override
     @Transactional(readOnly=true)
     public List<UserDocument> findAllByUserId(int user_id) {
         String sql = "select * from user_document where user_id='" + user_id + "'";

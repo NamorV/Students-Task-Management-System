@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserDocumentDao {
     void save(UserDocument userDocument, int user_id);
 
+    UserDocument findById(int id);
+
     List<UserDocument> findAllByUserId(int id);
 
     void delete(int id);

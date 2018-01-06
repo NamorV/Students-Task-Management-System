@@ -23,6 +23,11 @@ public class UserDocumentServiceImpl implements UserDocumentService {
     }
 
     @Override
+    public UserDocument findById(int id) {
+        return documentDao.findById(id);
+    }
+
+    @Override
     public void delete(int id) {
         documentDao.delete(id);
     }

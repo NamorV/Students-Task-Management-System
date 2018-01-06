@@ -9,5 +9,7 @@ public interface UserDocumentService {
 
     List<UserDocument> findAllByUserId(int id);
 
+    UserDocument findById(int id);
+
     void delete(int id);
 }
