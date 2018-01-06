@@ -36,6 +36,36 @@
     </c:if>
 </div>
 
+<div class="panel panel-default">
+              <!-- Default panel contents -->
+            <div class="panel-heading"><span class="lead">List of Documents </span></div>
+            <div class="tablecontainer">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>File Name</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th width="100"></th>
+                            <th width="100"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${documents}" var="doc" varStatus="counter">
+                        <tr>
+                            <td>${counter.index + 1}</td>
+                            <td>${doc.name}</td>
+                            <td>${doc.type}</td>
+                            <td>${doc.description}</td>
+                            <td><a href="<c:url value='/delete-document-${doc.id}' />" class="btn btn-danger custom-width">delete</a></td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
  <div class="panel panel-default">
 
             <div class="panel-heading"><span class="lead">Upload New Document</span></div>
@@ -44,7 +74,7 @@
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 		File1 to upload: <input type="file" name="file">
 
-                		Description: <input type="text" name="name">
+                		Description: <input type="text" name="description">
 
                 		<input type="submit" value="Upload"> Press here to upload the file!
                 	</form>

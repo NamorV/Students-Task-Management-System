@@ -8,4 +8,6 @@ public interface UserDocumentDao {
     void save(UserDocument userDocument, int user_id);
 
     List<UserDocument> findAllByUserId(int id);
+
+    void delete(int id);
 }

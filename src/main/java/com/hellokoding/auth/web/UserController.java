@@ -14,13 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -73,27 +71,6 @@ public class UserController {
     public String welcome(ModelMap model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
-
-//        if (principal instanceof UserDetails) {
-//            String username = ((UserDetails) principal).getUsername();
-//            user = userService.findByUsername(username);
-//            System.out.println(username);
-//            int id = user.getId();
-//            System.out.println(id);
-//        }
-
-       // model.addAttribute("user", user);
-
-        FileBucket fileModel = new FileBucket();
-        model.addAttribute("fileBucket", fileModel);
-
-        return "welcome";
-    }
-
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.POST)
-    public String welcome(@RequestParam("file") MultipartFile file, @ModelAttribute("fileBucket") FileBucket fileBucket) throws IOException {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User user = null;
         int id = 0;
 
         if (principal instanceof UserDetails) {
@@ -101,9 +78,39 @@ public class UserController {
             user = userService.findByUsername(username);
             id = user.getId();
         }
-        saveDocument(fileBucket, id);
+
+        List<UserDocument> documents = userDocumentService.findAllByUserId(id);
+        model.addAttribute("documents", documents);
+
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
 
         return "welcome";
+    }
+
+    @RequestMapping(value = { "/delete-document-{docId}" }, method = RequestMethod.GET)
+    public String deleteDocument(@PathVariable int docId) {
+        userDocumentService.delete(docId);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.POST)
+    public String welcome(ModelMap model, @RequestParam("file") MultipartFile file, @ModelAttribute("fileBucket") FileBucket fileBucket) throws IOException {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = null;
+        int id = 0;
+        List<UserDocument> documents = userDocumentService.findAllByUserId(id);
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            user = userService.findByUsername(username);
+            id = user.getId();
+        }
+        saveDocument(fileBucket, id);
+
+        return "redirect:/";
     }
 
     private void saveDocument(FileBucket fileBucket, int id) throws IOException{
@@ -116,7 +123,6 @@ public class UserController {
         document.setDescription(fileBucket.getDescription());
         document.setType(multipartFile.getContentType());
         document.setContent(multipartFile.getBytes());
-        System.out.println(multipartFile.getBytes().toString());
 
         userDocumentService.save(document, id);
     }

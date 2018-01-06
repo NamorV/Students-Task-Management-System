@@ -33,6 +33,12 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
         List<UserDocument> documents = jdbcTemplate.query(sql, new DocumentMapper());
         return documents;
     }
+
+    @Override
+    public void delete(int id) {
+        String sql = "delete from user_document where id = '" + id + "'";
+        jdbcTemplate.execute(sql);
+    }
 }
 
 class DocumentMapper implements RowMapper<UserDocument> {
@@ -40,6 +46,7 @@ class DocumentMapper implements RowMapper<UserDocument> {
     public UserDocument mapRow(ResultSet rs, int arg1) throws SQLException {
         UserDocument document = new UserDocument();
 
+        document.setId(rs.getInt("id"));
         document.setUserId(rs.getInt("user_id"));
         document.setName(rs.getString("name"));
         document.setDescription(rs.getString("description"));

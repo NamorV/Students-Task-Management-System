@@ -5,6 +5,8 @@ import com.hellokoding.auth.model.UserDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("userDocumentService")
 public class UserDocumentServiceImpl implements UserDocumentService {
     @Autowired
@@ -16,7 +18,14 @@ public class UserDocumentServiceImpl implements UserDocumentService {
     }
 
     @Override
-    public void findByUserId(int id) {
-        documentDao.findAllByUserId(id);
+    public List<UserDocument> findAllByUserId(int id) {
+        return documentDao.findAllByUserId(id);
     }
+
+    @Override
+    public void delete(int id) {
+        documentDao.delete(id);
+    }
+
+
 }
