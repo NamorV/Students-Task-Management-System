@@ -13,13 +13,18 @@ public class UserDocumentServiceImpl implements UserDocumentService {
     UserDocumentDao documentDao;
 
     @Override
-    public void save(UserDocument userDocument, int user_id) {
-        documentDao.save(userDocument, user_id);
+    public void save(UserDocument userDocument, int user_id, int courseId) {
+        documentDao.save(userDocument, user_id, courseId);
     }
 
     @Override
-    public List<UserDocument> findAllByUserId(int id) {
-        return documentDao.findAllByUserId(id);
+    public List<UserDocument> findAllForTeacher(int id) {
+        return documentDao.findAllForTeacher(id);
+    }
+
+    @Override
+    public List<UserDocument> findAllForStudent(int course_id, int user_id) {
+        return documentDao.findAllForStudent(course_id, user_id);
     }
 
     @Override

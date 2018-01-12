@@ -20,10 +20,10 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public void save(UserDocument userDocument, int user_id) {
-        String sql = "insert into user_document values(?,?,?,?,?,?)";
+    public void save(UserDocument userDocument, int user_id, int courseId) {
+        String sql = "insert into user_document values(?,?,?,?,?,?,?)";
         jdbcTemplate.update(sql, new Object[]{null, user_id, userDocument.getName(),
-                            userDocument.getDescription(), userDocument.getType(), userDocument.getContent()});
+                            userDocument.getDescription(), userDocument.getType(), userDocument.getContent(), courseId});
     }
 
     @Override
@@ -35,8 +35,16 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
 
     @Override
     @Transactional(readOnly=true)
-    public List<UserDocument> findAllByUserId(int user_id) {
-        String sql = "select * from user_document where user_id='" + user_id + "'";
+    public List<UserDocument> findAllForTeacher(int course_id) {
+        String sql = "select * from user_document WHERE course_id = " + course_id + ";";
+        List<UserDocument> documents = jdbcTemplate.query(sql, new DocumentMapper());
+        return documents;
+    }
+
+    @Override
+    public List<UserDocument> findAllForStudent(int course_id, int user_id) {
+        String sql = "select * from user_document WHERE course_id = " + course_id + " and user_id = "
+                + user_id +";";
         List<UserDocument> documents = jdbcTemplate.query(sql, new DocumentMapper());
         return documents;
     }
@@ -59,6 +67,7 @@ class DocumentMapper implements RowMapper<UserDocument> {
         document.setDescription(rs.getString("description"));
         document.setType(rs.getString("type"));
         document.setContent(rs.getBytes("content"));
+        document.setCourse_id(rs.getInt("course_id"));
 
         return document;
     }

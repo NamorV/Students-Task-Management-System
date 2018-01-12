@@ -32,56 +32,30 @@
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log Out</button>
+            <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
         </form>
     </c:if>
+
+    <div class="panel panel-default">
+                  <!-- Default panel contents -->
+                <div class="panel-heading"><span class="lead">Faculties</span></div>
+                <div class="tablecontainer">
+                    <table class="table table-hover">
+                        <tbody>
+                        <c:forEach items="${faculty}" var="fac" varStatus="counter">
+                            <tr>
+                                <td>${fac.id}</td>
+                                <td>${fac.name}</td>
+                                <td><a href="<c:url value='/courses-${fac.id}' />" class="btn btn-danger custom-width">Go to</a></td>
+                                <td><a href="<c:url value='/add-course-${fac.id}' />" class="btn btn-danger custom-width">Create course</a></td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 </div>
 
-<div class="panel panel-default">
-              <!-- Default panel contents -->
-            <div class="panel-heading"><span class="lead">List of Documents </span></div>
-            <div class="tablecontainer">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>File Name</th>
-                            <th>Type</th>
-                            <th>Description</th>
-                            <th width="100"></th>
-                            <th width="100"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach items="${documents}" var="doc" varStatus="counter">
-                        <tr>
-                            <td>${counter.index + 1}</td>
-                            <td>${doc.name}</td>
-                            <td>${doc.type}</td>
-                            <td>${doc.description}</td>
-                            <td><a href="<c:url value='/delete-document-${doc.id}' />" class="btn btn-danger custom-width">delete</a></td>
-                            <td><a href="<c:url value='/download-document-${doc.id}' />" class="btn btn-success custom-width">download</a></td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
- <div class="panel panel-default">
-
-            <div class="panel-heading"><span class="lead">Upload New Document</span></div>
-            <div class="uploadcontainer">
-                <form method="POST" action="welcome" enctype="multipart/form-data">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                		File1 to upload: <input type="file" name="file">
-
-                		Description: <input type="text" name="description">
-
-                		<input type="submit" value="Upload"> Press here to upload the file!
-                	</form>
-                </div>
-        </div>
-        <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
 
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

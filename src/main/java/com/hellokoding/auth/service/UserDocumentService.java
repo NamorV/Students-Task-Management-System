@@ -5,9 +5,11 @@ import com.hellokoding.auth.model.UserDocument;
 import java.util.List;
 
 public interface UserDocumentService {
-    void save(UserDocument userDocument, int user_id);
+    void save(UserDocument userDocument, int user_id, int courseId);
 
-    List<UserDocument> findAllByUserId(int id);
+    List<UserDocument> findAllForTeacher(int course_id);
+
+    List<UserDocument> findAllForStudent(int course_id, int user_id);
 
     UserDocument findById(int id);
 

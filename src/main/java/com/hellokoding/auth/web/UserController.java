@@ -1,11 +1,8 @@
 package com.hellokoding.auth.web;
 
-import com.hellokoding.auth.model.FileBucket;
-import com.hellokoding.auth.model.User;
-import com.hellokoding.auth.model.UserDocument;
-import com.hellokoding.auth.service.SecurityService;
-import com.hellokoding.auth.service.UserDocumentService;
-import com.hellokoding.auth.service.UserService;
+import com.hellokoding.auth.model.*;
+import com.hellokoding.auth.service.*;
+import com.hellokoding.auth.validator.CourseValidator;
 import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,10 +26,22 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private FacultyService facultyService;
+
+    @Autowired
+    private CourseService courseService;
+
+    @Autowired
     private SecurityService securityService;
 
     @Autowired
+    private RoleService roleService;
+
+    @Autowired
     private UserValidator userValidator;
+
+    @Autowired
+    private CourseValidator courseValidator;
 
     @Autowired
     private UserDocumentService userDocumentService;
@@ -53,8 +63,6 @@ public class UserController {
             userService.save(userForm);
         }
 
-        //securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
-
         return "redirect:/";
     }
 
@@ -71,6 +79,42 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(ModelMap model) {
+        List<Faculty> faculty = facultyService.findAll();
+        model.addAttribute("faculty", faculty);
+
+        return "welcome";
+    }
+
+    @RequestMapping(value = { "/delete-document-{docId}" }, method = RequestMethod.GET)
+    public String deleteDocument(@PathVariable int docId) {
+        userDocumentService.delete(docId);
+
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = {"/courses-{facultyId}"}, method = RequestMethod.GET)
+    public String courses(ModelMap model, @PathVariable int facultyId) {
+        List<Course> courses = courseService.findByFacultyId(facultyId);
+        model.addAttribute("courses", courses);
+
+        List<Integer> faculty_Id = new ArrayList<>();
+        faculty_Id.add(facultyId);
+        model.addAttribute("facultyId", faculty_Id);
+        return "courses";
+    }
+
+
+    @RequestMapping(value = {"/add-course-{facultyId}"}, method = RequestMethod.GET)
+    public String addCourses(ModelMap model, @PathVariable int facultyId) {
+        model.addAttribute("courseForm", new Course());
+
+        return "addCourse";
+    }
+
+    @RequestMapping(value = "/add-course-{facultyId}", method = RequestMethod.POST)
+    public String addCourses(@ModelAttribute("courseForm") Course courseForm, @PathVariable int facultyId,
+                             BindingResult bindingResult) {
+        courseValidator.validate(courseForm, bindingResult);
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
         int id = 0;
@@ -81,18 +125,13 @@ public class UserController {
             id = user.getId();
         }
 
-        List<UserDocument> documents = userDocumentService.findAllByUserId(id);
-        model.addAttribute("documents", documents);
-
-        FileBucket fileModel = new FileBucket();
-        model.addAttribute("fileBucket", fileModel);
-
-        return "welcome";
-    }
-
-    @RequestMapping(value = { "/delete-document-{docId}" }, method = RequestMethod.GET)
-    public String deleteDocument(@PathVariable int docId) {
-        userDocumentService.delete(docId);
+        if (bindingResult.hasErrors()) {
+            return "addCourse";
+        } else {
+            courseForm.setFaculty_id(facultyId);
+            courseForm.setTeacher_id(id);
+            courseService.save(courseForm);
+        }
 
         return "redirect:/";
     }
@@ -109,25 +148,55 @@ public class UserController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.POST)
-    public String welcome(ModelMap model, @RequestParam("file") MultipartFile file, @ModelAttribute("fileBucket") FileBucket fileBucket) throws IOException {
+    @RequestMapping(value = {"/documents-{courseId}"}, method = RequestMethod.GET)
+    public String documents(ModelMap model, @PathVariable int courseId) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = null;
         int id = 0;
-        List<UserDocument> documents = userDocumentService.findAllByUserId(id);
-        FileBucket fileModel = new FileBucket();
-        model.addAttribute("fileBucket", fileModel);
+
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
             user = userService.findByUsername(username);
             id = user.getId();
         }
-        saveDocument(fileBucket, id);
 
-        return "redirect:/";
+        if(roleService.isStudent(id)) {
+            List<UserDocument> documents = userDocumentService.findAllForStudent(courseId, id);
+            model.addAttribute("documents", documents);
+        } else {
+            List<UserDocument> documents = userDocumentService.findAllForTeacher(courseId);
+            model.addAttribute("documents", documents);
+        }
+
+
+
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
+
+        return "documents";
     }
 
-    private void saveDocument(FileBucket fileBucket, int id) throws IOException{
+    @RequestMapping(value = {"/documents-{courseId}"}, method = RequestMethod.POST)
+    public String documents(ModelMap model, @RequestParam("file") MultipartFile file,
+                            @PathVariable("courseId") int courseId, @ModelAttribute("fileBucket") FileBucket fileBucket) throws IOException {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = null;
+        int id = 0;
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
+
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            user = userService.findByUsername(username);
+            id = user.getId();
+        }
+
+        saveDocument(fileBucket, id, courseId);
+
+        return "redirect:/documents";
+    }
+
+    private void saveDocument(FileBucket fileBucket, int id, int courseId) throws IOException{
 
         UserDocument document = new UserDocument();
 
@@ -138,6 +207,6 @@ public class UserController {
         document.setType(multipartFile.getContentType());
         document.setContent(multipartFile.getBytes());
 
-        userDocumentService.save(document, id);
+        userDocumentService.save(document, id, courseId);
     }
 }

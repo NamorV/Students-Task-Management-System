@@ -12,6 +12,10 @@ public class UserDocument {
     private String description;
     private String type;
 
+
+
+    private int course_id;
+
 //    @Lob @Basic(fetch = FetchType.LAZY)
     private byte[] content;
 //
@@ -67,6 +71,14 @@ public class UserDocument {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    public int getCourse_id() {
+        return course_id;
+    }
+
+    public void setCourse_id(int course_id) {
+        this.course_id = course_id;
     }
 //
 //    public User getUser() {
