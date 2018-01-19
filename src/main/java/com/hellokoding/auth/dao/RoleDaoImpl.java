@@ -17,9 +17,8 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public boolean isStudent(int user_id) {
-        String sql = "select * from role where id = (select role_id from user_roles where user_id = "
+        String sql = "select * from role where id = (select role_id from app_user where id = "
                      + user_id +");";
-
         List<Role> role = jdbcTemplate.query(sql, new RoleMapper());
         if(role.get(0).getRole().equals("student")) {
             return true;

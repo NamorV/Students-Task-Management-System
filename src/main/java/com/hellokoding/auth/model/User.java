@@ -8,12 +8,27 @@ public class User {
     private String username;
     private String password;
     private String passwordConfirm;
+    private int faculty_id;
+    private int role_id;
+    private String faculty;
+    private String role;
 
-   // @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-   // private Set<UserDocument> userDocuments = new HashSet<UserDocument>();
+    public String getFaculty() {
+        return faculty;
+    }
 
-   // @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
+    public void setFaculty(String faculty) {
+        this.faculty = faculty;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public int getId() {
         return id;
     }
@@ -38,7 +53,6 @@ public class User {
         this.password = password;
     }
 
-    //@Transient
     public String getPasswordConfirm() {
         return passwordConfirm;
     }
@@ -47,11 +61,20 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-   // public Set<UserDocument> getUserDocuments() {
-        //return userDocuments;
-   // }
+    public int getFaculty_id() {
+        return faculty_id;
+    }
 
-   // public void setUserDocuments(Set<UserDocument> userDocuments) {
-        //this.userDocuments = userDocuments;
-   // }
+    public void setFaculty_id(int faculty_id) {
+        this.faculty_id = faculty_id;
+    }
+
+    public int getRole_id() {
+        return role_id;
+    }
+
+    public void setRole_id(int role_id) {
+        this.role_id = role_id;
+    }
+
 }

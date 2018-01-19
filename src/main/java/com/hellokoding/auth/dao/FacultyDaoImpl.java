@@ -24,6 +24,13 @@ public class FacultyDaoImpl implements FacultyDao {
         List<Faculty> faculties = jdbcTemplate.query(sql, new FacultyMapper());
         return faculties;
     }
+
+    @Override
+    public Faculty getFacultyById(int id) {
+        String sql = "select * from faculty where id='" + id + "';";
+        List<Faculty> faculties = jdbcTemplate.query(sql, new FacultyMapper());
+        return faculties.size() > 0 ? faculties.get(0) : null;
+    }
 }
 
 class FacultyMapper implements RowMapper<Faculty> {

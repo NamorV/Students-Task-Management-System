@@ -8,5 +8,5 @@ import java.util.List;
 public interface FacultyDao {
     List<Faculty> findAll();
 
-
+    Faculty getFacultyById(int id);
 }

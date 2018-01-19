@@ -16,8 +16,8 @@
 
     <title>Log in with your account</title>
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${contextPath}/resources/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/common.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
 
 <div class="panel panel-default">
               <!-- Default panel contents -->
-            <div class="panel-heading"><span class="lead">List of Documents </span></div>
+            <div class="panel-heading"><span class="lead">List of Courses </span></div>
             <div class="tablecontainer">
                 <table class="table table-hover">
                     <tbody>
@@ -39,14 +39,18 @@
                         <tr>
                             <td>${counter.index + 1}</td>
                             <td>${course.name}</td>
-                            <td><a href="<c:url value='/documents-${course.id}' />" class="btn btn-danger custom-width">Go to</a></td>
+                            <td><a href="<c:url value='/documents-${course.id}-${facultyId}' />" class="btn btn-danger custom-width">Go to</a></td>
+                            <td><a href="<c:url value='/delete-course-${course.id}-${course.faculty_id}' />" class="btn btn-danger custom-width">Delete course</a></td>
+                            <td><a href="<c:url value='/student-list-${course.id}-${facultyId}' />" class="btn btn-danger custom-width">Add students</a></td>
+                            <td><a href="<c:url value='/set-due-date-${course.id}-${facultyId}' />" class="btn btn-danger custom-width">Set due date</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
             </div>
-            </div>
-
+          </div>
+<td><a href="<c:url value='/welcome' />" class="btn btn-danger custom-width">Back</a></td>
+</div>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

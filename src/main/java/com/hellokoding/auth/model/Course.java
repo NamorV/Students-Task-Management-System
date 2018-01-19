@@ -1,11 +1,14 @@
 package com.hellokoding.auth.model;
 
 
+import java.util.Date;
+
 public class Course {
     private int id;
     private String name;
     private int teacher_id;
     private int faculty_id;
+    private Date dueDate;
 
     public int getId() {
         return id;
@@ -37,5 +40,13 @@ public class Course {
 
     public void setFaculty_id(int faculty_id) {
         this.faculty_id = faculty_id;
+    }
+
+    public Date getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(Date dueDate) {
+        this.dueDate = dueDate;
     }
 }

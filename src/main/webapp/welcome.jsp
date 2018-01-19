@@ -15,7 +15,8 @@
 
     <title>Create an account</title>
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/common.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -32,7 +33,6 @@
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Log Out</button>
-            <h4 class="text-center"><a href="${contextPath}/registration">Create an account</a></h4>
         </form>
     </c:if>
 
@@ -48,13 +48,17 @@
                                 <td>${fac.name}</td>
                                 <td><a href="<c:url value='/courses-${fac.id}' />" class="btn btn-danger custom-width">Go to</a></td>
                                 <td><a href="<c:url value='/add-course-${fac.id}' />" class="btn btn-danger custom-width">Create course</a></td>
+                                <td><a href="<c:url value='/registration-student-${fac.id}' />" class="btn btn-danger custom-width">Add student</a></td>
+                                <td><a href="<c:url value='/registration-teacher-${fac.id}' />" class="btn btn-danger custom-width">Add teacher</a></td>
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </div>
-</div>
+            <td><a href="<c:url value='/list-of-users' />" class="btn btn-danger custom-width">List of users</a></td>
+    </div>
+
 
 
 <!-- /container -->

@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface FacultyService {
     List<Faculty> findAll();
+
+    Faculty getFacultyById(int id);
 }

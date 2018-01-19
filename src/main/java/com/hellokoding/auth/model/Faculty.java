@@ -2,6 +2,7 @@ package com.hellokoding.auth.model;
 
 public class Faculty {
     private int id;
+    private String name;
 
     public int getId() {
         return id;
@@ -18,7 +19,4 @@ public class Faculty {
     public void setName(String name) {
         this.name = name;
     }
-
-    private String name;
-
 }

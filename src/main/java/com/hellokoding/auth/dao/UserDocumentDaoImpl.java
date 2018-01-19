@@ -42,9 +42,9 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
     }
 
     @Override
-    public List<UserDocument> findAllForStudent(int course_id, int user_id) {
-        String sql = "select * from user_document WHERE course_id = " + course_id + " and user_id = "
-                + user_id +";";
+    public List<UserDocument> findAllForStudent(int course_id, int user_id, int teacher_id) {
+        String sql = "select * from user_document WHERE course_id = " + course_id + " and (user_id = "
+                + user_id +" or user_id = " + teacher_id + ");";
         List<UserDocument> documents = jdbcTemplate.query(sql, new DocumentMapper());
         return documents;
     }
@@ -52,6 +52,12 @@ public class UserDocumentDaoImpl implements UserDocumentDao {
     @Override
     public void delete(int id) {
         String sql = "delete from user_document where id = '" + id + "'";
+        jdbcTemplate.execute(sql);
+    }
+
+    @Override
+    public void deleteAllFromCourse(int course_id) {
+        String sql = "delete from user_document where course_id = '" + course_id + "'";
         jdbcTemplate.execute(sql);
     }
 }

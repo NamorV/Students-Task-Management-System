@@ -24,8 +24,9 @@ public class UserDaoImpl implements UserDao{
 
     @Override
     public void save(User user) {
-        String sql = "insert into app_user values(?,?,?)";
-        jdbcTemplate.update(sql, new Object[]{null, user.getUsername(), user.getPassword()});
+        String sql = "insert into app_user values(?,?,?,?,?)";
+        jdbcTemplate.update(sql, new Object[]{null, user.getUsername(), user.getPassword(), user.getFaculty_id(),
+                            user.getRole_id()});
     }
 
     @Override
@@ -33,9 +34,43 @@ public class UserDaoImpl implements UserDao{
     public User findByUsername(String username) {
         String sql = "select * from app_user where username='" + username + "'";
         List<User> users = jdbcTemplate.query(sql, new UserMapper());
-        //String password = bCryptPasswordEncoder.(users.get(0).getPassword());
-        //System.out.println(users.get(0).getPassword());
         return users.size() > 0 ? users.get(0) : null;
+    }
+
+    @Override
+    @Transactional(readOnly=true)
+    public User findById(int id) {
+        String sql = "select * from app_user where id='" + id + "'";
+        List<User> users = jdbcTemplate.query(sql, new UserMapper());
+        return users.size() > 0 ? users.get(0) : null;
+    }
+
+    @Override
+    public List<User> findAllStudents() {
+        String sql = "select * from app_user where role_id= 3";
+        List<User> users = jdbcTemplate.query(sql, new UserMapper());
+        return users;
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        String sql = "select * from app_user where not role_id = 1";
+        List<User> users = jdbcTemplate.query(sql, new UserMapper());
+        return users;
+    }
+
+    @Override
+    public void deleteById(int userId) {
+        String sql = "delete from user_document where user_id = '" + userId + "'";
+        jdbcTemplate.execute(sql);
+        sql = "delete from user_roles where user_id = '" + userId + "'";
+        jdbcTemplate.execute(sql);
+        sql = "delete from student_course where student_id = '" + userId + "'";
+        jdbcTemplate.execute(sql);
+        sql = "delete from course where teacher_id = '" + userId + "'";
+        jdbcTemplate.execute(sql);
+        sql = "delete from app_user where id = '" + userId + "'";
+        jdbcTemplate.execute(sql);
     }
 }
 
@@ -47,6 +82,8 @@ class UserMapper implements RowMapper<User> {
         user.setId(rs.getInt("id"));
         user.setUsername(rs.getString("username"));
         user.setPassword(rs.getString("password"));
+        user.setFaculty_id(rs.getInt("faculty_id"));
+        user.setRole_id(rs.getInt("role_id"));
 
         return user;
     }

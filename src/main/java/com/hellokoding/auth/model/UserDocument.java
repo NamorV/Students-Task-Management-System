@@ -11,20 +11,10 @@ public class UserDocument {
     private String name;
     private String description;
     private String type;
-
-
-
     private int course_id;
-
-//    @Lob @Basic(fetch = FetchType.LAZY)
     private byte[] content;
-//
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "user_id")
-//    private User user;
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String author;
+
     public Integer getId() {
         return id;
     }
@@ -80,12 +70,12 @@ public class UserDocument {
     public void setCourse_id(int course_id) {
         this.course_id = course_id;
     }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 }

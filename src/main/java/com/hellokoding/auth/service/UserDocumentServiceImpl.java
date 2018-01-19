@@ -23,8 +23,8 @@ public class UserDocumentServiceImpl implements UserDocumentService {
     }
 
     @Override
-    public List<UserDocument> findAllForStudent(int course_id, int user_id) {
-        return documentDao.findAllForStudent(course_id, user_id);
+    public List<UserDocument> findAllForStudent(int course_id, int user_id, int teacher_id) {
+        return documentDao.findAllForStudent(course_id, user_id, teacher_id);
     }
 
     @Override
@@ -37,5 +37,8 @@ public class UserDocumentServiceImpl implements UserDocumentService {
         documentDao.delete(id);
     }
 
-
+    @Override
+    public void deleteAllFromCourse(int course_id) {
+        documentDao.deleteAllFromCourse(course_id);
+    }
 }

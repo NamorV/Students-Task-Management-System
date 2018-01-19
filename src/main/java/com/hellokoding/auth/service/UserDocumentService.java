@@ -9,9 +9,11 @@ public interface UserDocumentService {
 
     List<UserDocument> findAllForTeacher(int course_id);
 
-    List<UserDocument> findAllForStudent(int course_id, int user_id);
+    List<UserDocument> findAllForStudent(int course_id, int user_id, int teacher_id);
 
     UserDocument findById(int id);
 
     void delete(int id);
+
+    void deleteAllFromCourse(int course_id);
 }

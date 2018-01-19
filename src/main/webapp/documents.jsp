@@ -16,8 +16,8 @@
 
     <title>Log in with your account</title>
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${contextPath}/resources/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/common.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -30,6 +30,10 @@
 <div class="container">
 
 <div class="panel panel-default">
+    <h2>Due date ${dueDate} </h2>
+</div>
+
+<div class="panel panel-default">
               <!-- Default panel contents -->
             <div class="panel-heading"><span class="lead">List of Documents </span></div>
             <div class="tablecontainer">
@@ -40,6 +44,7 @@
                             <th>File Name</th>
                             <th>Type</th>
                             <th>Description</th>
+                            <th>Author</th>
                             <th width="100"></th>
                             <th width="100"></th>
                         </tr>
@@ -51,8 +56,9 @@
                             <td>${doc.name}</td>
                             <td>${doc.type}</td>
                             <td>${doc.description}</td>
-                            <td><a href="<c:url value='/delete-document-${doc.id}' />" class="btn btn-danger custom-width">delete</a></td>
-                            <td><a href="<c:url value='/download-document-${doc.id}' />" class="btn btn-success custom-width">download</a></td>
+                            <td>${doc.author}</td>
+                            <td><a href="<c:url value='/delete-document-${doc.id}-${courseId}-${facultyId}' />" class="btn btn-danger custom-width">delete</a></td>
+                            <td><a href="<c:url value='/download-document-${doc.id}-${courseId}-${facultyId}' />" class="btn btn-success custom-width">download</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>
@@ -63,8 +69,9 @@
  <div class="panel panel-default">
 
             <div class="panel-heading"><span class="lead">Upload New Document</span></div>
-            <div class="uploadcontainer">
-                <form method="POST" action="documents-${courseId}" enctype="multipart/form-data">
+            <div class="uploadcontainer ${status.error ? 'has-error' : ''}">
+
+                <form method="POST" action="documents-${courseId}-${facultyId}" enctype="multipart/form-data">
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 		File1 to upload: <input type="file" name="file">
 
@@ -75,6 +82,8 @@
                 </div>
             </div>
  </div>
+
+ <td><a href="<c:url value='/courses-${facultyId}' />" class="btn btn-danger custom-width">Back</a></td>
 
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

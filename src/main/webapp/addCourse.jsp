@@ -16,8 +16,8 @@
 
     <title>Create an account</title>
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${contextPath}/resources/bootstrap.min.css" rel="stylesheet">
+    <link href="${contextPath}/resources/common.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
 <div class="container">
 
     <form:form method="POST" modelAttribute="courseForm" class="form-signin">
-        <h2 class="form-signin-heading">Create your account</h2>
+        <h2 class="form-signin-heading">Create course</h2>
         <spring:bind path="name">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="name" class="form-control" placeholder="Name"
@@ -39,9 +39,10 @@
                 <form:errors path="name"></form:errors>
             </div>
         </spring:bind>
-
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>
+
+    <td><a href="<c:url value='/welcome' />" class="btn btn-danger custom-width">Back</a></td>
 
 </div>
 <!-- /container -->
