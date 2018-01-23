@@ -58,7 +58,7 @@
                             <td>${doc.type}</td>
                             <td>${doc.description}</td>
                             <td>${doc.author}</td>
-                            <td><a href="<c:url value='/download-document-${doc.id}-${courseId}' />" class="btn btn-success custom-width">download</a></td>
+                            <td><a href="<c:url value='/download-document-${doc.id}-${courseId}-${facultyId}' />" class="btn btn-success custom-width">download</a></td>
                         </tr>
                     </c:forEach>
                     </tbody>

@@ -14,8 +14,8 @@ public class StudentCourseServiseImpl implements StudentCourseServise {
     }
 
     @Override
-    public boolean isInCourse(int user_id) {
-        return studentCourseDao.isInCourse(user_id);
+    public boolean isInCourse(int user_id, int course_id) {
+        return studentCourseDao.isInCourse(user_id, course_id);
     }
 
     @Override

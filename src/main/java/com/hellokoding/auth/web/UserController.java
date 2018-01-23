@@ -7,6 +7,7 @@ import com.hellokoding.auth.validator.DueDateValidator;
 import com.hellokoding.auth.validator.RoleValidator;
 import com.hellokoding.auth.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -157,8 +158,10 @@ public class UserController {
         return "login";
     }
 
+    @Scheduled(fixedDelay = 5000)
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(ModelMap model) {
+
         List<Faculty> faculty = facultyService.findAll();
         model.addAttribute("faculty", faculty);
 
@@ -230,6 +233,9 @@ public class UserController {
     public String downloadDocument(@PathVariable int docId, @PathVariable int facultyId, @PathVariable int courseId,
                                    HttpServletResponse response) throws IOException {
         UserDocument document = userDocumentService.findById(docId);
+        if (document == null) {
+            return "redirect:/documents-" + courseId + "-" + facultyId;
+        }
         response.setContentType(document.getType());
         response.setContentLength(document.getContent().length);
         response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
@@ -243,9 +249,9 @@ public class UserController {
     public String documents(ModelMap model, @PathVariable int courseId, @PathVariable int facultyId) throws IOException {
         int id = getLoggedInId();
         Course course = courseService.findById(courseId);
+        System.out.println(id);
 
-
-        if(( course.getTeacher_id() != id ) & (!studentCourseServise.isInCourse(id)) ) {
+        if(( course.getTeacher_id() != id ) & (!studentCourseServise.isInCourse(id, courseId)) ) {
             return "redirect:/courses-" + course.getFaculty_id();
         }
 
@@ -289,7 +295,6 @@ public class UserController {
                             @ModelAttribute("fileBucket") FileBucket fileBucket,
                             BindingResult bindingResult) throws IOException {
         Course course = courseService.findById(courseId);
-        System.out.println(facultyId);
         dueDateValidator.validate(course, bindingResult);
 
         FileBucket fileModel = new FileBucket();
@@ -347,8 +352,6 @@ public class UserController {
     @RequestMapping(value = {"/set-due-date-{courseId}-{facultyId}"}, method = RequestMethod.POST)
     public String setDueDate(@PathVariable("courseId") int courseId, @RequestParam("dueDate") String dueDate,
                              @PathVariable("facultyId") int facultyId) {
-        System.out.println(dueDate);
-        System.out.println(facultyId);
         courseService.setDueDate(dueDate, courseId);
         return "redirect:/courses-" + facultyId;
     }

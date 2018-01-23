@@ -22,8 +22,8 @@ public class StudentCourseDaoImpl implements StudentCourseDao {
     }
 
     @Override
-    public boolean isInCourse(int user_id) {
-        String sql = "select * from student_course where student_id='" + user_id + "'";
+    public boolean isInCourse(int user_id, int course_id) {
+        String sql = "select * from student_course where student_id='" + user_id + "' and course_id=" + course_id + ";";
         List<StudentCourse> users = jdbcTemplate.query(sql, new SudentCourseMapper());
         return users.size() > 0 ? true : false;
     }
